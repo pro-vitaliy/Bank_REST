@@ -2,6 +2,7 @@ package com.example.bankcards.mapper;
 
 import com.example.bankcards.dto.user.UserCreateDTO;
 import com.example.bankcards.dto.user.UserDTO;
+import com.example.bankcards.dto.user.UserRolesUpdateDTO;
 import com.example.bankcards.dto.user.UserUpdateDTO;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
@@ -32,6 +33,8 @@ public abstract class UserMapper {
     @Mapping(source = "password", qualifiedByName = "encryptPassword", target = "password")
     public abstract void update(UserUpdateDTO userData, @MappingTarget User userModel);
 
+    public abstract void updateRoles(UserRolesUpdateDTO userData, @MappingTarget User userModel);
+
     @Named("extractMaskedCardNumbers")
     protected List<String> extractMaskedCardNumbers(List<Card> cards) {
         return cards.stream()
@@ -40,7 +43,7 @@ public abstract class UserMapper {
     }
 
     @Named("encryptPassword")
-    protected String encryptPassword() {
+    protected String encryptPassword(String password) {
 //        TODO: запилить пассворд енкодер
         return "encodedPassword";
     }
