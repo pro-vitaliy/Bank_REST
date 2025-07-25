@@ -53,4 +53,9 @@ public class Card {
 
     @Column(precision = 19, scale = 2, nullable = false)
     private BigDecimal balance = BigDecimal.ZERO;
+
+    public boolean isExpired() {
+        return CardStatus.EXPIRED == cardStatus ||
+                (expirationDate != null && expirationDate.isBefore(LocalDate.now()));
+    }
 }
