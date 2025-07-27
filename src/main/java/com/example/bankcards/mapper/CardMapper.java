@@ -54,7 +54,7 @@ public abstract class CardMapper {
 
     @Named("maskCardNumber")
     protected String maskCardNumber(String cardNumber) {
-        return "**** **** **** " + cardNumber.substring(cardNumber.length() - 4);
+        return CardUtils.maskCardNumber(cardNumber);
     }
 
     @Named("hashCardNumber")
