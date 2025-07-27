@@ -19,6 +19,8 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.jasypt.util.text.AES256TextEncryptor;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
 @RequiredArgsConstructor
 @Configuration
@@ -50,5 +52,16 @@ public class CryptoConfig {
         AES256TextEncryptor encryptor = new AES256TextEncryptor();
         encryptor.setPassword(password);
         return encryptor;
+    }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
+        converter.setAuthoritiesClaimName("roles");
+        converter.setAuthorityPrefix("");
+
+        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
+        jwtConverter.setJwtGrantedAuthoritiesConverter(converter);
+        return jwtConverter;
     }
 }
