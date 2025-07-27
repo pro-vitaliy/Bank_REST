@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,7 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final CustomUserDetailsService userService;
     private final JwtDecoder decoder;
+    private final JwtAuthenticationConverter converter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -34,7 +36,10 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2ResourceServer(rs -> rs.jwt(jwt -> jwt.decoder(decoder)))
+                .oauth2ResourceServer(rs -> rs.jwt(jwt -> jwt
+                        .decoder(decoder)
+                        .jwtAuthenticationConverter(converter)
+                ))
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }
