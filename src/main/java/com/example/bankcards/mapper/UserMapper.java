@@ -13,6 +13,8 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -23,6 +25,13 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class UserMapper {
+
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    protected void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Mapping(source = "cards", qualifiedByName = "extractMaskedCardNumbers", target = "maskedCardNumbers")
     public abstract UserDTO map(User userModel);
@@ -44,7 +53,6 @@ public abstract class UserMapper {
 
     @Named("encryptPassword")
     protected String encryptPassword(String password) {
-//        TODO: запилить пассворд енкодер
-        return "encodedPassword";
+        return passwordEncoder.encode(password);
     }
 }
