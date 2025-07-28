@@ -1,5 +1,6 @@
 package com.example.bankcards.util;
 
+import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.exception.ErrorCode;
 import com.example.bankcards.exception.ResourceNotFoundException;
@@ -16,6 +17,13 @@ public class SecurityUtils {
 
     public boolean isOwner(Long userId) {
         return getCurrentUser().getId().equals(userId);
+    }
+
+    public boolean isCardOwner(Long cardId) {
+        return getCurrentUser().getCards()
+                .stream()
+                .map(Card::getId)
+                .anyMatch(id -> id.equals(cardId));
     }
 
     private User getCurrentUser() {
