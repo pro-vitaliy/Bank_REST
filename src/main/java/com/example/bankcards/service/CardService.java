@@ -28,8 +28,8 @@ import java.util.List;
 public class CardService {
     private final CardRepository cardRepository;
     private final CardMapper mapper;
-    private AES256TextEncryptor encryptor;
-    private CardSpecification specBuilder;
+    private final AES256TextEncryptor encryptor;
+    private final CardSpecification specBuilder;
 
     public CardDTO findById(Long cardId) {
         Card card = cardRepository.findById(cardId)
