@@ -31,20 +31,20 @@ public class CardController {
     private final CardService cardService;
     private final SecurityUtils securityUtils;
 
-    @PreAuthorize("hasRole('ADMIN') or @securityUtils.isOwner(#id)")
+    @PreAuthorize("hasRole('ADMIN') or @securityUtils.isCardOwner(#id)")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/cards/{id}")
     public CardDTO getCardById(@PathVariable Long id) {
         return cardService.findById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or @securityUtils.isOwner(#id)")
+    @PreAuthorize("hasRole('ADMIN') or @securityUtils.isCardOwner(#id)")
     @GetMapping("/cards/{id}/number")
     public ResponseEntity<String> revealFullNumber(@PathVariable Long id) {
         return ResponseEntity.ok(cardService.getFullCardNumber(id));
     }
 
-    @PreAuthorize("hasRole('ADMIN') or @securityUtils.isOwner(#id)")
+    @PreAuthorize("hasRole('ADMIN') or @securityUtils.isCardOwner(#id)")
     @GetMapping("/cards/{id}/balance")
     public ResponseEntity<BigDecimal> getCardBalance(@PathVariable Long id) {
         return ResponseEntity.ok(cardService.getBalance(id));
@@ -71,7 +71,7 @@ public class CardController {
         return cardService.activate(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or @securityUtils.isOwner(#id)")
+    @PreAuthorize("hasRole('ADMIN') or @securityUtils.isCardOwner(#id)")
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/cards/{id}/block")
     public CardDTO blockCard(@PathVariable Long id) {
