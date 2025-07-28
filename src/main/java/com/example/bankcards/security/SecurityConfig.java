@@ -28,11 +28,20 @@ public class SecurityConfig {
     private final JwtDecoder decoder;
     private final JwtAuthenticationConverter converter;
 
+    private static final String[] PUBLIC_ENDPOINTS = {
+            "/api/login",
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/v3/api-docs.yaml",
+            "/v3/api-docs/**",
+            "/favicon.ico"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
+                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
