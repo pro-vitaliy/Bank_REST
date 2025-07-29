@@ -12,10 +12,3 @@ spring:
       ddl-auto: create
   liquibase:
     enabled: false
-
-encryption:
-  password: super-secret-key
-
-rsa:
-  private-key: classpath:certs/private-test.pem
-  public-key: classpath:certs/public-test.pem
