@@ -64,8 +64,8 @@ public class Card {
     private LocalDate createdAt;
 
     public boolean isExpired() {
-        return CardStatus.EXPIRED == cardStatus ||
-                (expirationDate != null && expirationDate.isBefore(LocalDate.now()));
+        return CardStatus.EXPIRED == cardStatus
+                || (expirationDate != null && expirationDate.isBefore(LocalDate.now()));
     }
 
     public void validateAvailableForOperation() {
