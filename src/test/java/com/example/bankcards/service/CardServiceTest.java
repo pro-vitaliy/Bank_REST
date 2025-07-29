@@ -124,7 +124,7 @@ class CardServiceTest {
     @Test
     void activateShouldThrowsExpired() {
         Card card = Mockito.spy(new Card());
-        card.setCardStatus(CardStatus.NEW);
+        card.setCardStatus(CardStatus.BLOCKED);
         when(card.isExpired()).thenReturn(true);
 
         when(cardRepository.findById(1L)).thenReturn(Optional.of(card));
@@ -135,7 +135,7 @@ class CardServiceTest {
     @Test
     void activateShouldSetsActive() {
         Card card = new Card();
-        card.setCardStatus(CardStatus.NEW);
+        card.setCardStatus(CardStatus.BLOCKED);
         card.setExpirationDate(LocalDate.now().plusDays(1));
 
         CardDTO dto = new CardDTO();
