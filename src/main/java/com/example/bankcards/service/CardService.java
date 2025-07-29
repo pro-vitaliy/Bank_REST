@@ -121,6 +121,4 @@ public class CardService {
         cardRepository.saveAll(expiredCards);
         return expiredCards.size();
     }
-
-
 }
