@@ -31,11 +31,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus s = ex.getErrorCode().getHttpStatus();
         return ResponseEntity.status(s).body(ex.getMessage());
     }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleUnexpectedException(Exception ex) {
-        log.error("Unexpected error occurred", ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Неизвестная ошибка. Свяжитесь с поддержкой.");
-    }
 }
