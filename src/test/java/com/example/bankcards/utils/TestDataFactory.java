@@ -10,10 +10,10 @@ import com.example.bankcards.util.CardUtils;
 import com.example.bankcards.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.jasypt.util.text.AES256TextEncryptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -53,6 +53,7 @@ public class TestDataFactory {
         card.setCardHash(CardUtils.hash(plainCardNumber));
         card.setOwner(owner);
         card.setExpirationDate(LocalDate.now().plusYears(3));
+        card.setBalance(new BigDecimal("500.00"));
         card.setCardStatus(cardStatus);
         cardRepository.save(card);
 
