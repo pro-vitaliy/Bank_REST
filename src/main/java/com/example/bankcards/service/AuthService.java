@@ -7,12 +7,14 @@ import com.example.bankcards.exception.ResourceNotFoundException;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AuthService {
@@ -21,17 +23,29 @@ public class AuthService {
     private final UserRepository userRepository;
 
     public String authenticateAndGenerateToken(AuthRequest authRequest) {
-        var auth = new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword());
-        authenticationManager.authenticate(auth);
+        String username = authRequest.getUsername();
+        log.info("Попытка входа: '{}'", username);
 
-        User user = userRepository.findByUsername(authRequest.getUsername())
-                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.USER_NOT_FOUND));
+        try {
+            var auth = new UsernamePasswordAuthenticationToken(username, authRequest.getPassword());
+            authenticationManager.authenticate(auth);
+        } catch (Exception ex) {
+            log.warn("Ошибка аутентификации пользователя '{}': {}", username, ex.getClass().getSimpleName());
+            throw ex;
+        }
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> {
+                    log.warn("Пользователь '{}' не найден в базе", username);
+                    return new ResourceNotFoundException(ErrorCode.USER_NOT_FOUND);
+                });
 
         List<String> roles = user.getRoles()
                 .stream()
                 .map(Enum::name)
                 .toList();
 
+        log.info("Успешная аутентификация пользователя '{}', роли: {}", username, roles);
         return jwtUtils.generateToken(user.getUsername(), roles);
     }
 }
